@@ -87,6 +87,49 @@ test_tree(){
 }
 
 static void
+test_index_tree(){
+  int val = 10;
+
+  quadtree_t *tree = quadtree_index_new(10, 10);
+  assert(tree->root->bounds->nw->x == 0);
+  assert(tree->root->bounds->nw->y == 9);
+  assert(tree->root->bounds->se->x == 9);
+  assert(tree->root->bounds->se->y == 0);
+
+
+  assert(quadtree_insert(tree, -1, -1, &val) == 0);
+  assert(quadtree_insert(tree, 110.0, 110.0, &val) == 0);
+
+  assert(quadtree_insert(tree, 8.0, 2.0, &val) != 0);
+  assert(tree->length == 1);
+  assert(tree->root->point->x == 8.0);
+  assert(tree->root->point->y == 2.0);
+
+  assert(quadtree_insert(tree, -1, 1.0, &val) == 0); /* failed insertion */
+  assert(quadtree_insert(tree, 2.0, 3.0, &val) == 1); /* normal insertion */
+  assert(quadtree_insert(tree, 2.0, 3.0, &val) == 2); /* replacement insertion */
+  assert(tree->length == 2);
+  assert(tree->root->point == NULL);
+
+  assert(quadtree_insert(tree, 3.0, 1.1, &val) == 1);
+  assert(tree->length == 3);
+  assert(quadtree_search(tree, 3.0, 1.1)->x == 3.0);
+  quadtree_walk(tree->root, ascent, descent);
+  quadtree_free(tree);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+static void
 test_points(){
   quadtree_point_t *point = quadtree_point_new(5, 6);
   assert(point->x == 5);
@@ -101,6 +144,7 @@ main(int argc, const char *argv[]){
   printf("quadtree_bounds_t: %ld\n", sizeof(quadtree_bounds_t));
   printf("quadtree_point_t: %ld\n", sizeof(quadtree_point_t));
   test(tree);
+  test(index_tree);
   test(node);
   test(bounds);
   test(points);

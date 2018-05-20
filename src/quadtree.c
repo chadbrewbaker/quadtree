@@ -139,6 +139,22 @@ quadtree_new(double minx, double miny, double maxx, double maxy) {
   return tree;
 }
 
+quadtree_t* quadtree_index_new(int x, int y) {
+ quadtree_t *tree;
+  if(!(tree = malloc(sizeof(*tree))))
+    return NULL;
+tree->root = quadtree_node_with_bounds(0, 0, x-1, y-1);
+  if(!(tree->root))
+    return NULL;
+  tree->key_free = NULL;
+  tree->length = 0;
+  return tree;
+
+
+}
+
+
+
 int
 quadtree_insert(quadtree_t *tree, double x, double y, void *key) {
   quadtree_point_t *point;

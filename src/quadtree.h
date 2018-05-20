@@ -77,8 +77,11 @@ quadtree_node_reset(quadtree_node_t* node, void (*key_free)(void*));
 quadtree_node_t*
 quadtree_node_with_bounds(double minx, double miny, double maxx, double maxy);
 
-quadtree_t*
-quadtree_new(double minx, double miny, double maxx, double maxy);
+quadtree_t* quadtree_new(double minx, double miny, double maxx, double maxy);
+
+quadtree_t* quadtree_index_new(int x, int y);
+
+
 
 void
 quadtree_free(quadtree_t *tree);
